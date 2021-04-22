@@ -1,5 +1,5 @@
 ---
-title: "단원문제1,2"
+title: "연습문제1,2"
 author: "정제원"
 date: '2021 4 21 '
 output: html_document
@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 단원문제1
 ### x는 1부터 100까지 수 중 3의 배수만 포함, y는 1부터 100까지 수 중 4의 배수만 포함하는 벡터를구하라
-
 
 
 ```{r cars}

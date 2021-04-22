@@ -1,0 +1,35 @@
+---
+title: "연습문제1,2"
+author: "정제원"
+date: '2021 4 21 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 연습문제 1
+### x=c(1:5)인 벡터가 있다. 이 벡터에 c(6:10)인 벡터를 추가하라
+
+
+
+```{r cars}
+x <- c(1:5)
+y <- c(6:10)
+union(x, y)
+x <- c(x, c(6:10))
+x
+```
+
+## 연습문제 2
+
+### x=c(1:10)인 벡터에서 짝수번째 요소만 남긴 x를 만들어라
+```{r}
+seq(0, 10, by=2)
+x <- 1:10
+x <- x[x%%2==0]
+x <- seq(0, 10, by=2)
+x
+```
+
