@@ -22,14 +22,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ### 05. airquality 데이터에서 바람이 가장 세게 분 날은 언제인가?
 
 ```{r}
-max(airquality$Wind)
+airquality[airquality$Wind == max(airquality$Wind),]
 ```
+
+#### 05 - 1973 06 17
 
 ### 06. airquality 데이터에서 총 몇개의 NA가 표함되어있는가?
 
 ```{r}
 table(is.na(airquality))
 ```
+
+#### 06 - 44개
 
 ### 07. quakes 데이터는 어느 섬의 지진을 관측한 데이터인가?
 

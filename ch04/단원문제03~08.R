@@ -7,7 +7,8 @@
 ## [,4]	Temp	numeric	Temperature (degrees F)
 
 #05 airquality 데이터에서 바람이 가장 세게 분 날은 언제인가?
-max(airquality$Wind)
+airquality[airquality$Wind == max(airquality$Wind),]
+## 1973 06 17
 
 #06 airquality 데이터에서 총 몇개의 NA가 표함되어있는가?
 table(is.na(airquality))
