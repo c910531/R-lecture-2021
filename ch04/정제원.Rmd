@@ -1,5 +1,5 @@
 ---
-title: "단원문제03~08"
+title: "단원문제"
 author: "정제원"
 date: '2021 4 22 '
 output: html_document
@@ -7,6 +7,25 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 01. x는 1부터 100까지의 수 중 3의 배수만 포함하고 y는 1부터 100까지 수 중 4의 배수만 포함하는 벡터로 만들어라
+
+```{r}
+x <- 1:100
+y <- 1:100
+x <- seq(0, 100, by=3)
+y <- seq(0, 100, by=4)
+x
+y
+```
+
+### 02. 01문제에서 x와 y의 교집합을 구하고, 해당 교집합에 포함된 수를 모두 더한 값을 구하라
+
+```{r}
+intersect(x, y)
+z <- intersect(x, y)
+sum(z)
 ```
 
 ### 03. airquality 데이터는 어느 도시 공기 질을 나타내는 데이터인가?
