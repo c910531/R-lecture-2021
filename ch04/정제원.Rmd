@@ -1,0 +1,46 @@
+---
+title: "단원문제03~08"
+author: "정제원"
+date: '2021 4 22 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 03. airquality 데이터는 어느 도시 공기 질을 나타내는 데이터인가?
+### 04. airquality 데이터의 온도 단위는 무엇인가?
+
+```{r cars}
+?airquality
+```
+
+#### 03 - new york
+#### 04 - [,4]	Temp	numeric	Temperature (degrees F)
+
+### 05. airquality 데이터에서 바람이 가장 세게 분 날은 언제인가?
+
+```{r}
+max(airquality$Wind)
+```
+
+### 06. airquality 데이터에서 총 몇개의 NA가 표함되어있는가?
+
+```{r}
+table(is.na(airquality))
+```
+
+### 07. quakes 데이터는 어느 섬의 지진을 관측한 데이터인가?
+
+```{r}
+?quakes
+```
+
+#### 07 - Fiji
+
+### 08. quakes에 기록된 가장 큰 지진의 규모는 얼마인가?
+```{r}
+max(quakes$mag)
+```
+
