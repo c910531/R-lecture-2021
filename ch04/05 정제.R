@@ -1,51 +1,88 @@
-# 함수
-# 팩토리얼 함수(fact)
-fact <- function(x) {
-    prod <- 1
-    for (i in 1:x) {
-        prod <- prod * i
-    }
-    return(prod)
-}
-fact(5)
+# 데이터 정제
+score <- read.csv('data/students2.csv')
+score
 
-# 정수 a ~ b 의 합을 구하는 함수(range_sum)
-range_sum <- function(a, b) {
-    sum <- 0
-    for (i in a:b) {
-        sum <- sum + i
-    }
-    return(sum)
+for (i in 2:4){
+score[,i] <- ifelse(score[,i]>100|score[,i]<0, NA, score[,i])
 }
-range_sum(1,10)
+score
 
-# 재귀 함수 (스스로를 흡수)
-facto <- function(n) {
-    if(n==0) {
-        return(1)
-    }
-        return(n * facto(n-1))
-}
-facto(10)
+# 결측값 처리
+head(airquality)
+sum(is.na(airquality))  # 44개의 NA
+table(is.na(airquality))
 
-fibo <- function(n) {
-    if(n==0 | n==1) {
-        return(1)
-    }
-       return(fibo(n-1) + fibo(n-2))
-}
-for (i in 0:10) {
-    print(paste(i, fibo(i)))
-}
-fibo(3)
-fibo(1)
-fibo(10)
+sum(is.na(airquality$Temp)) # 0개의 NA
+mean(airquality$Temp)
 
-# Peak-to-peak 함수 (사용자 정의 함수)
-peak2peak <- function(x) {
-    return(max(x) - min(x))
-}
-mat <- matrix(1:12, nrow=3)
-apply(mat, 1, mean)
-apply(mat, 1, peak2peak)
-apply(mat, 2, peak2peak)
+sum(is.na(airquality$Ozone)) # 37개의 NA
+mean(airquality$Ozone)
+mean(airquality$Ozone, na.rm = T) # na.rm =t : NA를 배제하고 평균 산출
+
+# 결측값 제거
+air_narm <- na.omit(airquality)
+sum(is.na(air_narm))
+
+# 결측값 대체 - 평균
+options(digits=4) # 소수점 설정
+airquality$Ozone <- replace(airquality$Ozone, is.na(airquality$Ozone),
+                            mean(airquality$Ozone, na.rm=T))
+head(airquality)
+
+# 결측값 대체 - 중간값(median)
+airquality$Solar.R <- replace(airquality$Solar.R, is.na(airquality$Solar.R),
+                              median(airquality$Solar.R, na.rm=T))
+head(airquality)
+
+# 이상값(outlier)
+patients <- data.frame(name=c('환자1','환자2','환자3','환자4','환자5'),
+                       age=c(22,20,25,30,27),
+                       gender=factor(c('M','F','M','K','F')),
+                       blood.type=factor(c('A','O','B','AB','C')))
+patients
+# 성별의 이상치 제거
+patients_outrm <- patients[patients$gender=='M'|patients$gender=='F',]
+patients_outrm
+
+# 성별과 혈액형의 이상치 제거
+patients_outrm <- patients[(patients$gender=='M'|patients$gender=='F') &
+                            (patients$blood.type=='A'|patients$blood.type=='B'|
+                            patients$blood.type=='O'|patients$blood.type=='AB'),]
+patients_outrm
+
+# 이상치 제거 %in% 연산자
+patients_outrm <- patients[patients$gender %in% c('M','F') &
+                           patients$blood.type %in% c('A','O','B','AB'),]
+patients_outrm
+
+# 이상치를 NA로 대체
+patients$gender <- ifelse(patients$gender %in% c('M','F'),
+                          patients$gender, NA)
+patients_outrm
+
+patients2 <- data.frame(name=c('환자1','환자2','환자3','환자4','환자5'),
+                       age=c(22,20,25,30,27),
+                       gender=c('M','F','M','K','F'),
+                       blood.type=c('A','O','B','AB','C'))
+
+patients2$gender <- ifelse(patients2$gender %in% c('M','F'),
+                           patients2$gender, NA)
+patients2$blood.type <- ifelse(patients2$blood.type %in% c('A','B','O','AB'),
+                               patients2$blood.type, NA)
+patients2
+sum(is.na(patients2))
+
+# 숫자의 이상치
+boxplot(airquality[,c(1:4)])
+boxplot(airquality[,1])$stats #airquality[,1]=airquality$Ozone
+boxplot(airquality$Ozone)$stats
+
+air <- airquality
+air$Ozone <- ifelse(air$Ozone<boxplot(airquality$Ozone)$stats[1] | 
+                    air$Ozone>boxplot(airquality$Ozone)$stats[5],
+                    NA, air$Ozone)
+sum(is.na(air$Ozone))
+sum(is.na(airquality$Ozone))
+mean(air$Ozone, na.rm=T)
+mean(airquality$Ozone, na.rm=T)
+boxplot(air$Ozone)

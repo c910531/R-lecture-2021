@@ -166,61 +166,76 @@ pre code {
 
 <h1 class="title toc-ignore">단원문제</h1>
 <h4 class="author">정제원</h4>
-<h4 class="date">2021 4 23</h4>
+<h4 class="date">2021 4 22</h4>
 
 </div>
 
 
-<div id="부터-100까지의-수-중에서-3의-배수이면서-4의-배수는-아닌-수의-합을-구하라" class="section level3">
-<h3>01. 1부터 100까지의 수 중에서 3의 배수이면서 4의 배수는 아닌 수의 합을 구하라</h3>
-<pre class="r"><code>sum &lt;- 0
-for (num in 1:100) {
-    if (num %% 3 == 0 &amp;
-        num %% 4 != 0) {
-        sum &lt;- sum + num
-    }
-}
-print(sum)</code></pre>
-<pre><code>## [1] 1251</code></pre>
+<div id="x는-1부터-100까지의-수-중-3의-배수만-포함하고-y는-1부터-100까지-수-중-4의-배수만-포함하는-벡터로-만들어라" class="section level3">
+<h3>01. x는 1부터 100까지의 수 중 3의 배수만 포함하고 y는 1부터 100까지 수 중 4의 배수만 포함하는 벡터로 만들어라</h3>
+<pre class="r"><code>x &lt;- 1:100
+y &lt;- 1:100
+x &lt;- seq(0, 100, by=3)
+y &lt;- seq(0, 100, by=4)
+x</code></pre>
+<pre><code>##  [1]  0  3  6  9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72
+## [26] 75 78 81 84 87 90 93 96 99</code></pre>
+<pre class="r"><code>y</code></pre>
+<pre><code>##  [1]   0   4   8  12  16  20  24  28  32  36  40  44  48  52  56  60  64  68  72
+## [20]  76  80  84  88  92  96 100</code></pre>
 </div>
-<div id="x와-n을-입력하면-1부터-n까지의-수-중에서-x의-배수-합을-구해주는-사용자-정의-함수를-만들어라" class="section level3">
-<h3>02. x와 n을 입력하면 1부터 n까지의 수 중에서 x의 배수 합을 구해주는 사용자 정의 함수를 만들어라</h3>
-<pre class="r"><code>range_sum &lt;- function(x,n) {
-    sum &lt;- 0
-    for (i in 1:n) {
-        if(i %% x==0){
-            sum &lt;- sum + i
-        }
-    }
-    return(sum)
-}</code></pre>
+<div id="문제에서-x와-y의-교집합을-구하고-해당-교집합에-포함된-수를-모두-더한-값을-구하라" class="section level3">
+<h3>02. 01문제에서 x와 y의 교집합을 구하고, 해당 교집합에 포함된 수를 모두 더한 값을 구하라</h3>
+<pre class="r"><code>intersect(x, y)</code></pre>
+<pre><code>## [1]  0 12 24 36 48 60 72 84 96</code></pre>
+<pre class="r"><code>z &lt;- intersect(x, y)
+sum(z)</code></pre>
+<pre><code>## [1] 432</code></pre>
 </div>
-<div id="install.packages와-library-명령어를-이용하여-hflights-데이터를-활용하라." class="section level3">
-<h3>03. install.packages와 library 명령어를 이용하여 hflights 데이터를 활용하라.</h3>
+<div id="airquality-데이터는-어느-도시-공기-질을-나타내는-데이터인가" class="section level3">
+<h3>03. airquality 데이터는 어느 도시 공기 질을 나타내는 데이터인가?</h3>
 </div>
-<div id="hflights-데이터에는-총-몇개의-na가-존재하는가" class="section level3">
-<h3>hflights 데이터에는 총 몇개의 NA가 존재하는가?</h3>
-<pre class="r"><code>##install.packages(&quot;hflights&quot;)
-library(hflights)
-sum(is.na(hflights))</code></pre>
-<pre><code>## [1] 25755</code></pre>
+<div id="airquality-데이터의-온도-단위는-무엇인가" class="section level3">
+<h3>04. airquality 데이터의 온도 단위는 무엇인가?</h3>
+<pre class="r"><code>?airquality</code></pre>
+<pre><code>## starting httpd help server ... done</code></pre>
+<div id="new-york" class="section level4">
+<h4>03 - new york</h4>
 </div>
-<div id="hflights-데이터에서-비행시간이-가장-긴-데이터는-몇-시간-몇-분인가" class="section level3">
-<h3>04. hflights 데이터에서 비행시간이 가장 긴 데이터는 몇 시간 몇 분인가?</h3>
-<pre class="r"><code>max(hflights$AirTime, na.rm = T) %/% 60</code></pre>
-<pre><code>## [1] 9</code></pre>
-<pre class="r"><code>max(hflights$AirTime, na.rm = T) %% 60</code></pre>
-<pre><code>## [1] 9</code></pre>
+<div id="temp-numeric-temperature-degrees-f" class="section level4">
+<h4>04 - [,4] Temp numeric Temperature (degrees F)</h4>
 </div>
-<div id="hflights-데이터에서-비행거리가-가장-긴-데이터는-몇-마일인가" class="section level3">
-<h3>05. hflights 데이터에서 비행거리가 가장 긴 데이터는 몇 마일인가?</h3>
-<pre class="r"><code>max(hflights$Distance)</code></pre>
-<pre><code>## [1] 3904</code></pre>
 </div>
-<div id="hflights-데이터에서-비행편이-취소된-건수는-몇-건인가" class="section level3">
-<h3>06. hflights 데이터에서 비행편이 취소된 건수는 몇 건인가?</h3>
-<pre class="r"><code>sum(hflights$Cancelled)</code></pre>
-<pre><code>## [1] 2973</code></pre>
+<div id="airquality-데이터에서-바람이-가장-세게-분-날은-언제인가" class="section level3">
+<h3>05. airquality 데이터에서 바람이 가장 세게 분 날은 언제인가?</h3>
+<pre class="r"><code>airquality[airquality$Wind == max(airquality$Wind),]</code></pre>
+<pre><code>##    Ozone Solar.R Wind Temp Month Day
+## 48    37     284 20.7   72     6  17</code></pre>
+<div id="section" class="section level4">
+<h4>05 - 1973 06 17</h4>
+</div>
+</div>
+<div id="airquality-데이터에서-총-몇개의-na가-표함되어있는가" class="section level3">
+<h3>06. airquality 데이터에서 총 몇개의 NA가 표함되어있는가?</h3>
+<pre class="r"><code>table(is.na(airquality))</code></pre>
+<pre><code>## 
+## FALSE  TRUE 
+##   874    44</code></pre>
+<div id="개" class="section level4">
+<h4>06 - 44개</h4>
+</div>
+</div>
+<div id="quakes-데이터는-어느-섬의-지진을-관측한-데이터인가" class="section level3">
+<h3>07. quakes 데이터는 어느 섬의 지진을 관측한 데이터인가?</h3>
+<pre class="r"><code>?quakes</code></pre>
+<div id="fiji" class="section level4">
+<h4>07 - Fiji</h4>
+</div>
+</div>
+<div id="quakes에-기록된-가장-큰-지진의-규모는-얼마인가" class="section level3">
+<h3>08. quakes에 기록된 가장 큰 지진의 규모는 얼마인가?</h3>
+<pre class="r"><code>max(quakes$mag)</code></pre>
+<pre><code>## [1] 6.4</code></pre>
 </div>
 
 
