@@ -1,7 +1,7 @@
-# 연습문제
-# 1. 자동차 배기량에 따라 고속도로 연비가 다른지 알아보려고 합니다. 
-# displ(배기량)이 4 이하인 자동차와 5 이상인 자동차 중 어떤 자동차의
-# hwy(고속도로 연비)가 평균적으로 더 높은지 알아보세요.
+###연습문제
+### 1. 자동차 배기량에 따라 고속도로 연비가 다른지 알아보려고 합니다. 
+### displ(배기량)이 4 이하인 자동차와 5 이상인 자동차 중 어떤 자동차의
+### hwy(고속도로 연비)가 평균적으로 더 높은지 알아보세요.
 
 library(ggplot2)
 library(dplyr)
@@ -13,6 +13,12 @@ mpg2<-mpg
         filter(displ>=5)
     mean(displ4$hwy)
     mean(displ5$hwy)
+### mutate를 활용해 한번에 표기
+mpg %>%
+    mutate(displ45=ifelse(displ<=4,'DISPL4','DISPL5')) %>%
+    group_by(displ45) %>%
+    summarise(avg_hwy=mean(hwy)) %>%
+    arrange(desc(avg_hwy))
 
 ### 2. 자동차 제조 회사에 따라 도시 연비가 다른지 알아보려고 합니다. 
 ### "audi"와 "toyota" 중 어느 manufacturer(자동차 제조 회사)의 cty(도시 연비)가 
@@ -61,6 +67,11 @@ mpg %>%
     arrange(desc(hwy)) %>%
     head(5)
 
+### 답안
+mpg %>%
+    filter(manufacturer=='audi') %>%
+    arrange(desc(hwy)) %>%
+
 ### 7.mpg 데이터는 연비를 나타내는 변수가 hwy(고속도로 연비), cty(도시 연비) 두 종류로 분리되어 있습니다.
 ### 두 변수를 각각 활용하는 대신 하나의 통합 연비 변수를 만들어 분석하려고 합니다.
 #### 1) mpg 데이터 복사본을 만들고, cty와 hwy를 더한 '합산 연비 변수'를 추가하세요.
@@ -80,9 +91,9 @@ mpg %>%
 
 mpg %>%
     mutate(total=mpg$cty + mpg$hwy, avg=(mpg$total)/2) %>%
-    group_by(manufacturer) %>%
+    group_by(manufacturer) %>%  # 삭제시 나머지 구분항목 표기
     arrange(desc(avg)) %>%
-    select(manufacturer,avg) %>%
+    select(manufacturer,avg) %>% # 삭제시 나머지 구분항목 표기
     head(3)
 
 ### 8. mpg 데이터의 class는 "suv", "compact" 등 자동차를 특징에 따라 일곱 종류로 분류한 변수입니다.
@@ -120,3 +131,10 @@ mpg %>%
     summarize(count=n()) %>%
     arrange(desc(count))
               
+### 정답
+
+mpg %>%
+    filter(class=='compact') %>%
+    group_by(manufacturer) %>%
+    summarise(num_kind=n()) %>%  # n() - 행의 갯수
+    arrange(desc(num_kind))
