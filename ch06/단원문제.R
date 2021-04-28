@@ -166,3 +166,30 @@ ggplot(df_tidy, aes(x=Feature, y=Value, fill=Species)) +
     coord_flip() 
 ### 3) 박스 플롯 그리기
 par(mfrow=c(3,1))   # mfrow=c( , ) = 3행 1열의 그래프
+boxplot(seto$Sepal.Length, seto$Sepal.Width,
+        seto$Petal.Length, seto$Petal.Width,
+        col=c('red','yellow','green','blue'),
+        par(mfrow=c(1,1))
+# ggplot
+seto_tidy <- gather(seto, key='Feature', value='Value', -Species)
+head(seto_tidy)
+s1 <- seto_tidy %>% 
+    ggplot(aes(x=Feature,y=Value)) +
+    s1 <- ggplot(seto_tidy, aes(x=Feature,y=Value,col=Feature)) +
+    geom_boxplot() +
+    ggtitle('Setosa')
+s1
+
+vers_tidy <- gather(vers, key='Feature', value='Value', -Species)
+virg_tidy <- gather(virg, key='Feature', value='Value', -Species)
+s2 <- vers_tidy %>% 
+    ggplot(aes(x=Feature,y=Value)) +
+    s2 <- ggplot(vers_tidy, aes(x=Feature,y=Value,col=Feature)) +
+    geom_boxplot() +
+    ggtitle('Versicolor')
+s3 <- virg_tidy %>% 
+    ggplot(aes(x=Feature,y=Value)) +
+    s3 <- ggplot(virg_tidy, aes(x=Feature,y=Value,col=Feature)) +
+    geom_boxplot() +
+    ggtitle('Virginica')
+grid.arrange(s1,s2,s3, ncol=1)
