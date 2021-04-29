@@ -1,0 +1,51 @@
+---
+title: "선형회귀(갈튼)"
+author: "정제원"
+date: '2021 4 29'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 갈튼 파일 불러오기
+
+```{r cars}
+gal <- read.csv('data/Galtons Height Data.csv')
+glimpse(gal)
+plot(gal)
+```
+
+## 아버지, 아들 키 단위 변환
+```{r}
+x <- gal %>% 
+    filter(Gender=='M') %>% 
+    mutate(cm_K=Height*2.54,cm_F=Father*2.54) %>% 
+    select(cm_F,cm_K)
+```
+
+## 아버지, 아들 키 변수 지정
+```{r}
+x_model <- lm(cm_K~cm_F,data=x)
+coef(x_model)
+```
+### 회기식 : cm_F = 0.44774 * cm_K + 97.1776
+
+## ggplot을 이용한 최적 모델
+```{r}
+x %>% 
+    ggplot(aes(cm_F,cm_K)) +
+    geom_point(position="jitter") +
+    geom_abline(intercept = coef(model)[1], slope = coef(model)[2], col='red')
+```
+
+## 종합
+```{r}
+summary(x_model)
+```
+
+#### 확인할 수 있는 사항
+#### 1. cm_F의 변수인 Pr(>|t|) 값은 2e-16으로 0.05보다 낮기 때문에 신뢰도 높음.
+#### 2. R-squeared값은 0.15의 결과로 낮게 도출되었고, 본 모델은 부모-자식간 신장의 상관관계에 대한 설득력이 떨어짐.
+#### 3. P-value값은 2.2e-16으로 0.05보다 낮기 때문에 오류 확률은 낮음.

@@ -20,3 +20,29 @@ Y2 = 5 * X / 12+ 7/4
 Y2
 mse2 <- sum((Y-Y2)**2) / length(Y)
 mse2
+
+# R의 단순 선형회귀 모델 lm
+model <- lm(Y ~  X)
+model
+
+plot(X, Y)
+abline(model, col='red')
+fitted(model)
+mse_model <- sum((Y - fitted(model))**2) / length(Y)
+mse_model
+
+# 잔차 - residuals
+residuals(model)
+
+# 잔차 제곱합
+deviance(model)
+
+# 평균 제곱오차(MSE)
+deviance(model) / length(Y)
+
+summary(model)
+
+# 예측
+newX <- data.frame(X=c(1.2,2.0,20.65))
+newY <- predict(model, newdata=newX)
+newY
