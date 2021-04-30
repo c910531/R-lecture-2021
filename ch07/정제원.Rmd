@@ -12,7 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ## 갈튼 파일 불러오기
 
 ```{r cars}
-gal <- read.csv('data/Galtons Height Data.csv')
+library(ggplot2)
+library(dplyr)
+gal <- read.csv('http://www.randomservices.org/random/data/Galton.txt', sep='\t')
 glimpse(gal)
 plot(gal)
 ```
@@ -29,7 +31,14 @@ x <- gal %>%
 ```{r}
 x_model <- lm(cm_K~cm_F,data=x)
 coef(x_model)
+par(mfrow=c(2,2))
+plot(x_model)
 ```
+#### Residuals vs Fitted : 기울기가 0에 가까운 직선이 출력되었고 이는 이상적인 정규분포를 이룬다고 해석할 수 있음.
+#### Normal Q-Q : 기울기가 45도에 가까운 직선이 출력되었고 이는 소수의 항목을 제외하고 잔차의 정규분포를 따르고 있음을 알수있음.
+#### scale-Location : 기울기가 0에 가까운 직선이 출력되었고 이는 등분산성을 충족하는 것으로 해석할 수 있음.
+#### Residuals vs Leverage : 점선 내부에 극단적 수치의 사례가 존재하지 않기 때문에 본 모델에 정규성을 충족한다고 해석할 수 있음. 
+
 ### 회기식 : cm_F = 0.44774 * cm_K + 97.1776
 
 ## ggplot을 이용한 최적 모델
@@ -37,15 +46,32 @@ coef(x_model)
 x %>% 
     ggplot(aes(cm_F,cm_K)) +
     geom_point(position="jitter") +
-    geom_abline(intercept = coef(model)[1], slope = coef(model)[2], col='red')
+    geom_abline(intercept = coef(x_model)[1], slope = coef(x_model)[2], col='red')
 ```
 
-## 종합
+#### 확인할 수 있는 사항
 ```{r}
 summary(x_model)
 ```
 
-#### 확인할 수 있는 사항
 #### 1. cm_F의 변수인 Pr(>|t|) 값은 2e-16으로 0.05보다 낮기 때문에 신뢰도 높음.
-#### 2. R-squeared값은 0.15의 결과로 낮게 도출되었고, 본 모델은 부모-자식간 신장의 상관관계에 대한 설득력이 떨어짐.
-#### 3. P-value값은 2.2e-16으로 0.05보다 낮기 때문에 오류 확률은 낮음.
+#### 2. R-squeared값은 0.15의 결과로 낮게 도출되었고, 부모-자식간 신장의 상관관계에 대한 설득력이 떨어짐.
+#### 3. P-value값은 2.2e-16으로 0.05보다 낮기 때문에 본 모델의 오류 확률은 낮음.
+
+### 다중선형회귀
+
+```{r}
+colors <- c('red', 'purple', 'dark orange', 'blue')
+plot(x_model)
+x1 <- seq(min(x$cm_F), max(x$cm_F), length.out = 1000)
+for (i in 1:4) {
+    plot(jitter(x$cm_F), jitter(x$cm_K),
+     xlab='Father', ylab='Son')
+    m <- lm(cm_K ~ poly(cm_F, i), data = x)
+    assign(paste('m', i, sep = '.'), m)
+    y <- predict(m, data.frame(cm_F = x1))
+    lines(x1, y, col = colors[i], lwd = 2)
+}
+anova(m.1, m.2, m.3, m.4)
+```
+
