@@ -1,0 +1,4 @@
+library(KoNLP)
+useSejongDic()
+useSejongDic()
+
