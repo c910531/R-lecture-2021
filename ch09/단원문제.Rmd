@@ -1,0 +1,180 @@
+---
+title: "단원문제"
+author: "정제원"
+date: '2021 5 03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. ucla 데이터 예측 / 평가 (dt, rf, svm, knn)
+
+```{r ucla}
+library(rpart)
+library(rpart.plot)
+library(ggplot2)
+library(randomForest)
+library(caret)
+library(e1071)
+library(class)
+ucla <- read.csv('https://stats.idre.ucla.edu/stat/data/binary.csv')
+str(ucla)
+ucla$admit = factor(ucla$admit)
+set.seed(2021)
+```
+
+## dt 모델
+```{r pressure, echo=FALSE}
+dt=rpart(admit~., data=ucla)
+par(mfrow=c(1,1), xpd=NA)
+plot(dt)
+text(dt, use.n=TRUE)
+```
+
+## 예측, 평가 & 시각화
+```{r pressure, echo=FALSE}
+pred <- predict(dt, ucla, type='class') # 예측
+table(pred, ucla$admit)
+confusionMatrix(pred,ucla$admit) # 평가
+rpart.plot(dt, type=4) # 시각화
+```
+
+## 80% 비율로 훈련/테스트 데이터셋 만들기
+```{r pressure, echo=FALSE}
+train_index <- createDataPartition(ucla$admit, p=0.8, list=F)
+ucla_train <- ucla[train_index,]
+ucla_test <- ucla[-train_index,]
+table(ucla_train$admit)
+table(ucla_test$admit)
+```
+## 학습, 예측, 평가 & 시각화
+```{r pressure, echo=FALSE}
+dt <- rpart(admit~.,ucla_train)  # 학습
+pred <- predict(dt, ucla_test, type='class') # 예측
+confusionMatrix(pred, ucla_test$admit) # 평가
+rpart.plot(dt) # 시각화
+```
+
+# 랜덤 포레스트
+```{r pressure, echo=FALSE}
+rf <- randomForest(admit~., data=ucla)
+print(rf)
+set.seed(2021)
+train_index <- createDataPartition(ucla$admit,p=0.8,list=F)
+ucla_train <- ucla[train_index,]
+ucla_test <- ucla[-train_index,]
+```
+## 모델링, 예측, 평가 & 시각화
+```{r pressure, echo=FALSE}
+rf <- randomForest(admit~., ucla_train) # 모델링
+pred <- predict(rf, ucla_test, type='class') # 예측
+confusionMatrix(pred, ucla_test$admit) # 평가
+plot(rf) # 시각화
+```
+
+# svm
+```{r pressure, echo=FALSE}
+set.seed(2021)
+train_index <- createDataPartition(ucla$admit,p=0.8,list=F)
+ucla_train <- ucla[train_index,]
+ucla_test <- ucla[-train_index,]
+```
+## 모델링, 예측, 평가 & 시각화
+```{r pressure, echo=FALSE}
+svc <- svm(admit~.,ucla_train) # 모델링
+pred <- predict(svc, ucla_test, type='class') # 예측
+confusionMatrix(pred, ucla_test$admit) # 평가
+table(pred, ucla_test$admit)
+```
+
+# KNN
+```{r pressure, echo=FALSE}
+k <- knn(ucla_train[,1:2], ucla_test[,1:2],
+         ucla_train$admit,k=5)
+ucla_test$admit
+confusionMatrix(k, ucla_test$admit)
+```
+# 2. wine데이터 예측 / 평가 (dt, rf, svm, knn)
+```{r}
+setwd('C:/Workspace/R')
+wine <- read.table('data/wine.data.txt', sep = ',')
+colums <-readLines('data/wine.name.txt')
+names(wine)[1] <- "class"
+names(wine)[2:14] <- columns
+names(wine)[2:14] <- substr(columns, 4, nchar(columns))
+names(wine)
+wine$class = factor(wine$class)
+```
+## dt 모델
+```{r}
+dt=rpart(class~., data=wine)
+par(mfrow=c(1,1), xpd=NA)
+plot(dt)
+text(dt, use.n=TRUE)
+```
+## 예측, 평가 & 시각화
+```{r}
+pred <- predict(dt, wine, type='class') # 예측
+table(pred, wine$class)
+confusionMatrix(pred,wine$class) # 평가
+rpart.plot(dt, type=1) # 시각화
+```
+
+## 80%비율로 훈련/테스트 데이터셋 만들기
+```{r}
+set.seed(2021)
+train_index <- createDataPartition(wine$class, p=0.8, list=F)
+wine_train <- wine[train_index,]
+wine_test <- wine[-train_index,]
+table(wine_train$class)
+table(wine_test$class)
+```
+## 학습, 예측, 평가 & 시각화
+```{r}
+dt <- rpart(class~.,wine_train)
+pred <- predict(dt, wine_test, type='class')
+confusionMatrix(pred, wine_test$class)
+rpart.plot(dt)
+```
+
+# 랜덤 포레스트
+```{r}
+set.seed(2021)
+train_index <- createDataPartition(wine$class, p=0.8, list=F)
+wine_train <- wine[train_index,]
+wine_test <- wine[-train_index,]
+```
+## 모델링, 예측, 평가 & 시각화
+```{r}
+rf <- randomForest(class~., wine_train)  # 모델링
+pred <- predict(rf, wine_test, type='class')  # 예측
+confusionMatrix(pred, wine_test$class)  # 평가
+plot(rf)  # 시각화
+```
+
+# svm
+```{r}
+set.seed(2021)
+train_index <- createDataPartition(wine$class,p=0.8,list=F)
+wine_train <- wine[train_index,]
+wine_test <- wine[-train_index,]
+```
+## 모델링, 예측, 평가
+```{r}
+svc <- svm(class~.,wine_train)  # 모델링
+pred <- predict(svc, wine_test, type='class')  # 예측
+confusionMatrix(pred, wine_test$class)  # 평가
+table(pred, wine_test$class)
+```
+
+# KNN
+```{r}
+k <- knn(wine_train[,1:3], wine_test[,1:3],
+         wine_train$class,k=5)
+k
+wine_test$class
+confusionMatrix(k, wine_test$class)
+```
+
