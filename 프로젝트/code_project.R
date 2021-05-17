@@ -10,19 +10,20 @@ summary(t_trade)
 
 ### 1-1번 그래프 ###
 t_g <- t_trade %>%
+    filter(계약연도!=2021) %>% 
     group_by(구,계약연도) %>% 
     ggplot(aes(계약연도,거래금액)) + 
     geom_point(stat='identity',alpha=0.2, position='jitter')
 t_g
 
-
+### 1-2번 그래프(세부년도 기재) ###
 t_g_b <- t_trade %>%
     group_by(구,계약연도) %>% 
     ggplot(aes(계약연도,거래금액,group=구,col=구)) + 
     geom_bar(stat='identity', position='dodge',aes(fill=구)) 
 t_g_b
 
-### 1-2번 그래프 ###
+### 2번 그래프 ###
 t_trade %>% 
     group_by(계약연도,구) %>% 
     summarise(avg_t_trade = mean(거래금액)) %>% 
@@ -33,13 +34,12 @@ t_trade %>%
 
 
 ### 1-3번 그래프 (거래량) ###
+
 t_volume <- t_trade %>%
+    filter(계약연도 != 2021) %>% 
     group_by(계약연도,구) %>% 
-    summarise(num_kind=n())
-
-str(t_volume)
-
-ggplot(data=t_volume,aes(계약연도,num_kind)) +
+    summarise(num_kind=n()) %>% 
+    ggplot(aes(계약연도,num_kind)) +
     geom_bar(stat='identity', position='dodge',aes(fill=구)) +
     ylab("계약건수")
-str(t_trade)
+t_volume
